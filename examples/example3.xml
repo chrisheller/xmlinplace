@@ -1,0 +1,11 @@
+<!-- same as example2, but with empty elements -->
+<root>
+  <child attr1=1 attr2="2" attr3 = " extra space " attr4='single quotes'>
+  Some text
+  </child>
+  <child2    attr="val"    />
+  <child3       />
+  <child4  attr1=1    attr2="2" 
+        attr3 = " extra space "     
+        attr4='single quotes' />
+</root>

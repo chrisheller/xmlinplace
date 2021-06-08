@@ -1,0 +1,11 @@
+<!-- same as example2, but with empty elements and attributes multiplied by 25 -->
+<root>
+  <child attr1=25 attr2="50" attr3 = " extra space " attr4='single quotes'>
+  Some text
+  </child>
+  <child2    attr="val"    />
+  <child3       />
+  <child4  attr1=25    attr2="50" 
+        attr3 = " extra space "     
+        attr4='single quotes' />
+</root>

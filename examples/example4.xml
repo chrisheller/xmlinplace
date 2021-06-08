@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- similar to example3, but with initial processing instruction 
+     and nested elements (and multi-line comments)
+     -->
+<root>
+  <child attr1=1 attr2="2" attr3 = " extra space " attr4='single quotes'>
+  Some text
+  </child>
+  <child2 />
+  <child2><!-- nested comment will be removed --></child2>
+  <child2 attr="some attribute" />
+  <child2    attr="val"    >
+    <nested1 />
+    <nested2>Nested text</nested2>
+  </child2>
+  <child3       />
+  <child4  attr1=1    attr2="2" 
+        attr3 = " extra space "     
+        attr4='single quotes' />
+</root>

@@ -1,0 +1,6 @@
+<!-- same as example1, but with attributes -->
+<root>
+  <child attr1=1 attr2="2" attr3 = " extra space " >
+  Some text
+  </child>
+</root>
