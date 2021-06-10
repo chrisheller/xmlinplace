@@ -1,4 +1,4 @@
-import parsexml
+import options, parsexml
 import ./types
 
 proc getPosition*(x: XmlParser) : Position =
@@ -23,19 +23,24 @@ type
     ## 
     prevPosition* : Position
     currPosition* : Position
+    suppressNextElementEnd* : bool
+    checkedInitialPI* : bool
+    generatedPI* : Option[XmlParseItem]
     tagStack* : TagStack
+    errors* : seq[string]
     parser* : XmlParser
 
-proc initXmlParseContext*(expectDepth=10) : XmlParseCtxRef =
+proc initXmlParseContext*(expectDepth=10) : XmlParseContext =
   ## Initializes an `XmlParseCtxRef` value with the expected
   ## parse depth, which defaults to 10. If the actual parsed
   ## depth exceeds this value, no errors will result; the
   ## internal data structure will be re-sized automatically.
   ## 
-  result = XmlParseCtxRef(
+  result = XmlParseContext(
     prevPosition : Position(line: 1, column: 1, pos: 0),
     currPosition : Position(line: 1, column: 1, pos: 0),
     tagStack : newSeqOfCap[string](expectDepth),
+    generatedPI : none(XmlParseItem),
   )
 
 proc depth*(ctx: XmlParseCtxRef) : Natural =
