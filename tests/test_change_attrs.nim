@@ -50,7 +50,7 @@ when isMainModule:
     verify_xml = verify_filename.readFile()
 
   if output_xml != verify_xml:
-    let d = newDiff(output_xml.split('\n'),
-                    verify_xml.split('\n'))
+    let d = newDiff(verify_xml.split('\n'),
+                    output_xml.split('\n'))
     echo d.outputUnixDiffStr()
     raise newException(Exception, "Did not match")

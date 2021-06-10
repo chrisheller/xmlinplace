@@ -12,29 +12,25 @@ proc suppress_element*(in_xml: string) : string =
     in_stream = newStringStream(in_xml)
     out_stream = newStringStream()
 
-    in_elem = false
-
   for xpi in processxml(in_stream, ctx):
     case xpi.event:
     of xmlElementOpen, xmlElementStart:
-      if in_elem:                       # nested element
-        continue
-      elif xpi.elementName == "child2":
-        let is_empty = xpi.event == xmlElementStart and xpi.isEmptyStart
-        if not is_empty:    # we don't have to watch for attrs/children
-          in_elem = true    # if it is an empty start element
-        continue
-    of xmlElementClose, xmlElementEnd:
-      if in_elem:
-        if xpi.elementName == "child2":
-          if xpi.event == xmlElementEnd:
-            in_elem = false
-          elif xpi.isEmptyClose:
-            in_elem = false
+      if xpi.elementName == "child2":
+        if xpi.event == xmlElementStart and xpi.isEmptyStart:
+          continue    # <child2 />
+
+        while true:   # have to check for attrs/child elements
+          ctx.next()
+          if ctx.kind() in {xmlElementEnd, xmlElementClose}:
+            let child_xpi = ctx.item()
+            if ctx.kind() == xmlElementClose and not child_xpi.isEmptyClose:
+              continue  # was just closing > of opening of element
+            if child_xpi.elementName == "child2":
+              break
+
         continue
     else:
-      if in_elem:
-        continue
+      discard
 
     out_stream.write($xpi)
 
@@ -55,7 +51,7 @@ when isMainModule:
     verify_xml = verify_filename.readFile()
 
   if output_xml != verify_xml:
-    let d = newDiff(output_xml.split('\n'),
-                    verify_xml.split('\n'))
+    let d = newDiff(verify_xml.split('\n'),
+                    output_xml.split('\n'))
     echo d.outputUnixDiffStr()
     raise newException(Exception, "Did not match")
